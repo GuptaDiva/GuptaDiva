@@ -116,14 +116,6 @@ Text recognition from images — the seed of the document-AI work I do today.
 - 🎤 Went from hosting the first FOSS Lucknow meetup to speaking at a FOSS conference
 - 👩‍💻 Former **GDSC AI/ML Lead**
 
----
-
-### 📊 GitHub at a glance
-
-<div align="center">
-<img height="165" src="https://github-readme-stats.vercel.app/api?username=GuptaDiva&show_icons=true&hide_border=true&theme=transparent&title_color=8B5CF6&icon_color=8B5CF6&text_color=7D8590&count_private=true" />
-<img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=GuptaDiva&layout=compact&hide_border=true&theme=transparent&title_color=8B5CF6&text_color=7D8590" />
-</div>
 
 ---
 
