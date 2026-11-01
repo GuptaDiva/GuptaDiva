@@ -4,7 +4,7 @@
 
 <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&pause=1000&color=8B5CF6&center=true&vCenter=true&width=600&lines=ML+Engineer+II+%40+Creatium;I+build+RAG+systems+%26+fine-tune+LLMs;Speech%2C+vision+%26+document+AI;Core+volunteer+%40+FOSS+United+Lucknow" alt="Typing SVG" /></a>
 
-**A curious coder from Lucknow, India — turning research ideas into things people actually use.**
+**An AI/ML Engineer  — turning research ideas into things people actually use.**
 
 <a href="https://ai-engineer-portfolio-diva-gupta-bf.vercel.app"><img src="https://img.shields.io/badge/Portfolio-8B5CF6?style=for-the-badge&logo=vercel&logoColor=white" /></a>
 <img src="https://img.shields.io/badge/Based_in-Lucknow,_India-0EA5E9?style=for-the-badge&logo=googlemaps&logoColor=white" />
