@@ -1,144 +1,138 @@
-# Pronunciation Assessment Service - API Quick Reference
+<div align="center">
 
-This document summarizes how to fetch dictionary entries via the read-only endpoints, with and without organization scoping, and how avatar-aware resolution works.
+# Hey, I'm Diva 👋
 
-## Base URL
+<a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&pause=1000&color=8B5CF6&center=true&vCenter=true&width=600&lines=ML+Engineer+II+%40+Creatium;I+build+RAG+systems+%26+fine-tune+LLMs;Speech%2C+vision+%26+document+AI;Core+volunteer+%40+FOSS+United+Lucknow" alt="Typing SVG" /></a>
 
-- Local development: `http://127.0.0.1:8000`
-- All endpoints are under `/api/v1`
+**A curious coder from Lucknow, India — turning research ideas into things people actually use.**
 
----
+<a href="https://ai-engineer-portfolio-diva-gupta-bf.vercel.app"><img src="https://img.shields.io/badge/Portfolio-8B5CF6?style=for-the-badge&logo=vercel&logoColor=white" /></a>
+<img src="https://img.shields.io/badge/Based_in-Lucknow,_India-0EA5E9?style=for-the-badge&logo=googlemaps&logoColor=white" />
+<img src="https://komarev.com/ghpvc/?username=GuptaDiva&style=for-the-badge&color=10B981&label=Profile+views" />
 
-## GET /api/v1/dictionary/{engine}
-
-List dictionary entries for a TTS engine, optionally scoped to an org, with optional global fallback.
-
-Query params:
-- `org_id` (optional): organization identifier. If omitted, only the global dictionary is returned.
-- `include_global` (optional, default: `true`): when `org_id` is provided, merge global entries; org entries take precedence on conflicts.
-- `limit` (default: `500`), `offset` (default: `0`): pagination window.
-- `prefix`, `q` (optional): filter by word prefix or substring.
-
-Behavior:
-- No `org_id` → returns global entries only.
-- `org_id` + `include_global=true` → returns org entries plus global entries; org entries override global on conflicts.
-- `org_id` + `include_global=false` → returns org entries only.
-
-Examples (assuming `BASE=http://127.0.0.1:8000`):
-```bash
-# Global only (no org)
-curl -sS "$BASE/api/v1/dictionary/kokoro?limit=3" | jq
-
-# Org-only (no global fallback)
-curl -sS "$BASE/api/v1/dictionary/kokoro?org_id=test2&include_global=false&limit=3" | jq
-
-# Org + global (org overrides on conflicts)
-curl -sS "$BASE/api/v1/dictionary/kokoro?org_id=test2&include_global=true&limit=3" | jq
-
-# With filters
-curl -sS "$BASE/api/v1/dictionary/google?org_id=test2&include_global=true&prefix=A&limit=50" | jq
-```
+</div>
 
 ---
 
-## GET /api/v1/dictionary/{engine}/word/{word}
+### 🚀 Featured projects
 
-Resolve a single word’s pronunciation with org/voice precedence rules.
+<table>
+<tr>
+<td width="50%" valign="top">
 
-Query params:
-- `org_id` (optional): when present, returns the org entry if it exists; if not found in org scope this endpoint returns 404.
-- `voice_id` (optional): returns a voice-specific override if set; otherwise the org/global entry.
-- `avatar_id` (optional): overrides `engine` from the avatar’s provider (and may resolve a default `voice_id` if omitted).
+#### 🚑 [RescueVision](https://github.com/GuptaDiva/RescueVision)
+Detects road accidents with **YOLO** and assesses passenger injuries with **CNNs** from dashcam and in-cabin video — so help gets dispatched faster.
 
-Behavior:
-- No `org_id` → returns the global entry only (404 if not present).
-- With `org_id` → returns the org entry if present; to inspect the merged org+global view use the list endpoint with `include_global=true`.
-- With `voice_id` → voice override (if exists) takes precedence.
+</td>
+<td width="50%" valign="top">
 
-Examples:
-```bash
-# Global only (no org)
-curl -sS "$BASE/api/v1/dictionary/kokoro/word/NASA" | jq
+#### 💬 [Chat Summarisation Assistant](https://github.com/GuptaDiva/Summarization-of-Chats)
+A **Telegram bot** that summarises long group chats. Tested live with real users — 100% uptime, 100% success rate. **Published on IEEE Xplore.**
 
-# Org-scoped (404 if word not found in org scope)
-curl -sS "$BASE/api/v1/dictionary/google/word/AWS?org_id=test2" | jq
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
 
-# Voice-specific override lookup
-curl -sS "$BASE/api/v1/dictionary/google/word/AWS?org_id=test2&voice_id=google_en-US-Chirp3-HD-Leda" | jq
-```
+#### 🤖 [Personalised RAG Chatbot](https://github.com/GuptaDiva/Chatbot-Personal-)
+Ask my résumé anything. A **RAG** chatbot grounded in my own experience — retrieval, embeddings and an LLM answering as me.
 
----
+</td>
+<td width="50%" valign="top">
 
-## Avatar-aware resolution (optional)
+#### 🤟 [ASL → Text](https://github.com/GuptaDiva/ASL-Conversion)
+An **LSTM** network on **MediaPipe Holistic** keypoints that translates American Sign Language gestures into text.
 
-Some clients prefer to select the engine (and voice) based on an avatar identifier. When `avatar_id` is provided the backend resolves the engine from the avatar mapping, and may also provide a default `voice_id` if one isn’t supplied.
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
 
-Examples:
-```bash
-# Engine overridden by the avatar’s provider; merged view with org fallback
-curl -sS "$BASE/api/v1/dictionary/placeholder?avatar_id=217&org_id=test2&include_global=true&limit=3" | jq
+#### 🎮 [Gesture-Control Gaming](https://github.com/GuptaDiva/Gesture-Control-Gaming)
+Playing Smash Karts with hand gestures — computer vision as a game controller.
 
-# Single-word lookup with avatar-based engine resolution
-curl -sS "$BASE/api/v1/dictionary/placeholder/word/AWS?avatar_id=217&org_id=test2" | jq
-```
+</td>
+<td width="50%" valign="top">
 
-Notes:
-- Replace `placeholder` with any string; when `avatar_id` is supplied the router resolves the actual engine from the avatar profile.
-- The avatar mapping is fetched once on first use (cached for ~1 hour). You can pre-warm it at startup if desired.
+#### 🔤 [OCR](https://github.com/GuptaDiva/ocr)
+Text recognition from images — the seed of the document-AI work I do today.
 
----
+</td>
+</tr>
+</table>
 
-## POST /api/v1/dictionary/{engine}
+<details>
+<summary><b>More experiments</b></summary>
+<br>
 
-Add (or update) a pronunciation entry in the specified scope.
+- 🧬 [Alzheimer's detection with CNNs](https://github.com/GuptaDiva/AlzheimerPatients-CNN-)
+- 📚 [Book Recommendation System](https://github.com/GuptaDiva/Book-Recommendation-System)
+- 🎬 [Movie recommendation with a Boltzmann Machine](https://github.com/GuptaDiva/Movie-Recommendation)
+- 💳 [Fraud detection with Self-Organizing Maps](https://github.com/GuptaDiva/Fraudulent_CreditCard_Customers)
+- 📉 [Customer Churn Prediction](https://github.com/GuptaDiva/-Customer-Churn-Prediction)
+- 🛠️ [FOSS Summarizer workshop](https://github.com/GuptaDiva/Foss_workshop)
 
-Query/Form fields:
-- `word` (required)
-- `pronunciation` (required) — format depends on engine:
-  - kokoro: `[WORD](/ipa/)`
-  - google: bare IPA `ipa`
-  - elevenlabs: English spelling
-- `org_id` (optional) — when present, the entry is written under that org (the org namespace is created implicitly if it doesn’t exist yet)
-- `voice_id` (optional) — for setting voice-specific entries
-- `avatar_id` (optional) — engine/voice may be resolved from avatar
-- `force` (optional, default `false`) — confirm overwrite when an entry already exists
-
-Behavior:
-- If `org_id` exists, the entry is added/updated in that org.
-- If `org_id` does not exist, the org namespace is implicitly created and the entry is added there.
-- If the same entry already exists at that scope and `force=false`, returns a `confirmation_required` payload; resend with `force=true` to overwrite.
-
-Examples:
-```bash
-# Add to an org (implicit org create if needed)
-curl -sS -X POST "$BASE/api/v1/dictionary/kokoro" \
-  --data-urlencode "word=NASA" \
-  --data-urlencode "pronunciation=[NASA](/ˈnæsə/)" \
-  --data-urlencode "org_id=test2" | jq
-
-# Overwrite when confirmation is required
-curl -sS -X POST "$BASE/api/v1/dictionary/google" \
-  --data-urlencode "word=Azure" \
-  --data-urlencode "pronunciation=ˈæʒər" \
-  --data-urlencode "org_id=test2" | jq
-# If response shows confirmation_required, resend with force=true:
-curl -sS -X POST "$BASE/api/v1/dictionary/google" \
-  --data-urlencode "word=Azure" \
-  --data-urlencode "pronunciation=ˈæʒər" \
-  --data-urlencode "org_id=test2" \
-  --data-urlencode "force=true" | jq
-
-# Avatar-aware add (engine resolved from avatar)
-curl -sS -X POST "$BASE/api/v1/dictionary/placeholder" \
-  --data-urlencode "word=AWS" \
-  --data-urlencode "pronunciation=ˈeɪˈdʌbəljuːˈɛs" \
-  --data-urlencode "avatar_id=217" \
-  --data-urlencode "org_id=test2" | jq
-```
+</details>
 
 ---
 
-## Tips
-- Engines: `kokoro` entries are stored as `[WORD](/ipa/)`; `google` entries as bare IPA (no slashes); `elevenlabs` entries as English spellings.
-- For bulk merged views (org + global), prefer the list endpoint with `include_global=true`.
-- For exact resolution with overrides, use the word endpoint with `voice_id`.
+### 🛠️ Tech I reach for
+
+**ML & AI**
+<br>
+<img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
+<img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" />
+<img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=flat-square&logo=tensorflow&logoColor=white" />
+<img src="https://img.shields.io/badge/Hugging_Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black" />
+<img src="https://img.shields.io/badge/LangChain-1C3C3C?style=flat-square&logo=langchain&logoColor=white" />
+<img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=flat-square&logo=opencv&logoColor=white" />
+<img src="https://img.shields.io/badge/YOLO-00FFFF?style=flat-square&logo=yolo&logoColor=black" />
+<img src="https://img.shields.io/badge/MediaPipe-0097A7?style=flat-square&logo=google&logoColor=white" />
+<img src="https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white" />
+<img src="https://img.shields.io/badge/Jupyter-F37626?style=flat-square&logo=jupyter&logoColor=white" />
+
+**Build & ship**
+<br>
+<img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white" />
+<img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" />
+<img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" />
+<img src="https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB" />
+<img src="https://img.shields.io/badge/React_Native-20232A?style=flat-square&logo=react&logoColor=61DAFB" />
+<img src="https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white" />
+<img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white" />
+
+**Design**
+<br>
+<img src="https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=figma&logoColor=white" />
+<img src="https://img.shields.io/badge/Framer-0055FF?style=flat-square&logo=framer&logoColor=white" />
+
+---
+
+### 🏆 Highlights
+
+- 📄 **Published on IEEE Xplore** — Chat Summarisation Assistant
+- 🏁 **Smart India Hackathon finalist**
+- 🌱 **Open source** — Hacktoberfest contributor; core volunteer at **FOSS United Lucknow**; volunteer at **IndiaFOSS 2026**
+- 🎤 Went from hosting the first FOSS Lucknow meetup to speaking at a FOSS conference
+- 👩‍💻 Former **GDSC AI/ML Lead**
+
+---
+
+### 📊 GitHub at a glance
+
+<div align="center">
+<img height="165" src="https://github-readme-stats.vercel.app/api?username=GuptaDiva&show_icons=true&hide_border=true&theme=transparent&title_color=8B5CF6&icon_color=8B5CF6&text_color=7D8590&count_private=true" />
+<img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=GuptaDiva&layout=compact&hide_border=true&theme=transparent&title_color=8B5CF6&text_color=7D8590" />
+</div>
+
+---
+
+<div align="center">
+
+### 🤝 Let's build something
+
+Open to conversations about **RAG, LLM fine-tuning, speech AI** and **open source**.
+<br>
+Say hi through my [portfolio](https://ai-engineer-portfolio-diva-gupta-bf.vercel.app) ✨
+
+</div>
